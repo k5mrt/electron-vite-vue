@@ -1,5 +1,6 @@
 import { ipcRenderer, contextBridge } from 'electron'
 import { ipcInvoke } from '../ipc/ipcUtils'
+import { ElectronAPI } from '../types/api'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -24,14 +25,11 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   // ...
 })
 
-// APIの型定義
-export interface ElectronAPI {
-  selectFile: () => Promise<string | undefined>;
-}
 // 安全なAPIを`renderer`に公開
-contextBridge.exposeInMainWorld('electronAPI', {
-  selectFile: async () => await ipcInvoke('select-file', undefined) // `main`プロセスにリクエストを送信
-})
+const electronAPI: ElectronAPI = {
+  selectFile: async () => await ipcInvoke('select-file', undefined)
+}
+contextBridge.exposeInMainWorld('electronAPI', electronAPI)
 
 // --------- Preload scripts loading ---------
 function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
