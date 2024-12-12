@@ -1,8 +1,9 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import os from 'node:os'
+import { ipcHandle } from '../ipc/ipcUtils'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -76,6 +77,14 @@ async function createWindow() {
     return { action: 'deny' }
   })
   // win.webContents.on('will-navigate', (event, url) => { }) #344
+
+  // IPCイベントをリッスンしてファイルダイアログを表示
+  ipcHandle('select-file', async () => {
+    const result = await dialog.showOpenDialog(win, {
+      properties: ['openFile']
+    })
+    return result.filePaths[0] // 選択したファイルのパス（キャンセルされた場合は`undefined`）
+  })
 }
 
 app.whenReady().then(createWindow)
@@ -107,8 +116,8 @@ ipcMain.handle('open-win', (_, arg) => {
   const childWindow = new BrowserWindow({
     webPreferences: {
       preload,
-      nodeIntegration: true,
-      contextIsolation: false,
+      // nodeIntegration: true,
+      // contextIsolation: false,
     },
   })
 

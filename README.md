@@ -29,10 +29,10 @@ git clone https://github.com/electron-vite/electron-vite-vue.git
 cd electron-vite-vue
 
 # install dependency
-npm install
+yarn install
 
 # develop
-npm run dev
+yarn run dev
 ```
 
 ## Debug

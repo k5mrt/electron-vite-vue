@@ -26,11 +26,12 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
-    "electron": "^29.1.1",
-    "electron-builder": "^24.13.3",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "sass": "^1.82.0",
     "typescript": "^5.4.2",
-    "vite": "^5.1.5",
-    "vite-plugin-electron": "^0.28.4",
+    "vite": "^6.0.3",
+    "vite-plugin-electron": "^0.29.0",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vue": "^3.4.21",
     "vue-tsc": "^2.0.6"

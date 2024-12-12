@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron'
+import { ipcInvoke } from '../ipc/ipcUtils'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -21,6 +22,15 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
   // You can expose other APTs you need here.
   // ...
+})
+
+// APIの型定義
+export interface ElectronAPI {
+  selectFile: () => Promise<string | undefined>;
+}
+// 安全なAPIを`renderer`に公開
+contextBridge.exposeInMainWorld('electronAPI', {
+  selectFile: async () => await ipcInvoke('select-file', undefined) // `main`プロセスにリクエストを送信
 })
 
 // --------- Preload scripts loading ---------
